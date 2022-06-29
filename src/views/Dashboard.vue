@@ -13,7 +13,9 @@
       setup() {
         const { user } = useAuth0();
 
-        return {user};
+        return {
+          user
+        }
       }
     }
 </script>

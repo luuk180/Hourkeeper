@@ -12,7 +12,8 @@ app.use(
   createAuth0({
     domain: "dev-d0-elrpu.us.auth0.com",
     client_id: "BXTrydLqk5bcwWJkFkfe6xOjL7N6a3lp",
-    redirect_uri: window.location.origin
+    redirect_uri: window.location.origin,
+    audience: "https://api.hourkeeper.net"
   })
 )
 
