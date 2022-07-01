@@ -21,8 +21,26 @@ app.use(cors({
 }));
 app.use(jwtCheck);
 
-app.get('/query', function (req, res) {
-  res.send();
+app.post('/query', function (req, res) {
+  let authToken = req.auth.sub.split("|")
+  switch (authToken[0]) {
+    case "google-oauth2":
+      console.log("Logging in with google")
+      res.status(200)
+      res.send({message: "Success!"})
+      console.log(req.body.then())
+      break;
+    case "windowslive":
+      console.log("Logging in with microsoft")
+      res.status(200)
+      res.send({message: "Success!"})
+      break;
+    default:
+      console.log("incorrect")
+      res.status(401)
+      res.send({message: "failed!"})
+  }
+  console.log(authToken[1])
 });
 
 app.listen(3000);
