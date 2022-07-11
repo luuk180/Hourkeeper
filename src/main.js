@@ -1,8 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
-import { createAuth0 } from '@auth0/auth0-vue'
+import {createAuth0} from '@auth0/auth0-vue'
 
 import "bootstrap/dist/js/bootstrap.js"
 

@@ -1,9 +1,9 @@
 <template>
     <div class="bg-secondary h-100">
         <div class="container">
-            Welcome to your personal dashboard {{user.given_name}}.
-            <div v-if="lastMonthHours">Last month you worked {{lastMonthHours}} hours.</div>
-            <div v-if="currentMonthHours">This month you worked {{currentMonthHours}} hours.</div>
+            Welcome to your personal dashboard {{ user.given_name }}.
+            <div v-if="lastMonthHours">Last month you worked {{ lastMonthHours }} hours.</div>
+            <div v-if="currentMonthHours">This month you worked {{ currentMonthHours }} hours.</div>
         </div>
     </div>
 </template>
@@ -23,12 +23,12 @@ export default {
   created() {
     this.getCurrentMonthHours();
     this.getLastMonthHours();
-    const { user } = useAuth0();
+    const {user} = useAuth0();
     this.user = user;
   },
   methods: {
     async getQuery(month, year) {
-      const { getAccessTokenSilently } = useAuth0();
+      const {getAccessTokenSilently} = useAuth0();
       const token = await getAccessTokenSilently();
       const response = await fetch('https://api.hourkeeper.net/read', {
         method: "post",
@@ -47,7 +47,7 @@ export default {
       let currentDate = new Date();
       this.getQuery(currentDate.getMonth() + 1, currentDate.getFullYear()).then((data) => {
         let totalHours = 0;
-        for(let i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           totalHours += parseFloat(data[i].hours);
         }
         this.currentMonthHours = totalHours;
@@ -62,7 +62,7 @@ export default {
         year--;
         this.getQuery(month, year).then((data) => {
           let totalHours = 0;
-          for(let i = 0; i < data.length; i++) {
+          for (let i = 0; i < data.length; i++) {
             totalHours += parseFloat(data[i].hours);
           }
           this.lastMonthHours = totalHours;
@@ -71,7 +71,7 @@ export default {
         month--;
         this.getQuery(month, year).then((data) => {
           let totalHours = 0;
-          for(let i = 0; i < data.length; i++) {
+          for (let i = 0; i < data.length; i++) {
             totalHours += parseFloat(data[i].hours);
           }
           this.lastMonthHours = totalHours;
