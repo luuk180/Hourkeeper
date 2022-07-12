@@ -47,11 +47,11 @@ export default {
           "date": this.date
         })
       });
-      const returnedVal = await response.json();
-      if(returnedVal == null) {
+      if(response.statusCode === 200) {
         this.result = "Success!"
+      }else{
+        this.result = "Failed to add hours."
       }
-      return returnedVal;
     }
   },
   created() {
