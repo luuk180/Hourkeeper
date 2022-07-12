@@ -10,6 +10,9 @@
                 <input type="date" class="form-control" v-model="date">
             </div>
             <button @click="submitForm" type="submit" class="btn btn-primary">Add</button>
+            <div v-if="result" class="mt-4">
+                <span>{{result}}</span>
+            </div>
         </form>
     </div>
 </template>
@@ -20,9 +23,10 @@ import {useAuth0} from "@auth0/auth0-vue";
 export default {
   data() {
     return {
-      date: (new Date()).toISOString(),
+      date: (new Date()).toISOString().split('T')[0],
       hours: 0,
       accessToken: "",
+      result: "",
     }
   },
   methods: {
@@ -44,7 +48,9 @@ export default {
         })
       });
       const returnedVal = await response.json();
-      console.log(returnedVal);
+      if(returnedVal == null) {
+        this.result = "Success!"
+      }
       return returnedVal;
     }
   },
