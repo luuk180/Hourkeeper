@@ -3,7 +3,7 @@
         <form class="w-75 container pt-2 pb-2">
             <div class="form-group mb-2">
                 <label for="hours">Hours worked: {{ hours }}</label>
-                <input type="range" min="0" max="24" step=".25" class="form-control" v-model="hours" placeholder="8">
+                <input type="range" min="0" max="24" step=".25" class="form-control" v-model="hours" />
             </div>
             <div class="form-group mb-2">
                 <label for="date">Date:</label>
