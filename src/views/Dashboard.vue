@@ -1,9 +1,17 @@
 <template>
     <div class="bg-secondary h-100">
-        <div class="container">
+        <div class="container card-group">
             Welcome to your personal dashboard {{ user.given_name }}.
-            <div v-if="lastMonthHours">Last month you worked {{ lastMonthHours }} hours.</div>
-            <div v-if="currentMonthHours">This month you worked {{ currentMonthHours }} hours.</div>
+            <div class="container">
+                <div class="card bg-dark text-white" v-if="currentMonthHours">
+                    <div class="card-title">{{currentMonth}}</div>
+                    <div class="card-content">{{currentMonthHours}}</div>
+                </div>
+                <div class="card bg-dark text-white" v-if="lastMonthHours">
+                    <div class="card-title">{{lastMonth}}</div>
+                    <div class="card-content">{{lastMonthHours}}</div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -14,10 +22,14 @@ import {useAuth0} from "@auth0/auth0-vue";
 
 export default {
   data() {
+    let months = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"];
     return {
+      currentMonth: (months[new Date().getMonth()+1] + " " + new Date().getFullYear()),
+      lastMonth: (months[new Date().getMonth()] + " " + new Date().getFullYear()),
       currentMonthHours: 0,
       lastMonthHours: 0,
-      user: {}
+      user: {},
     }
   },
   created() {
