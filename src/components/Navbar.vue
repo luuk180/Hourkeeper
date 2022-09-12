@@ -21,10 +21,6 @@
                         <button v-if="!isAuthenticated" class="btn btn-outline-success me-2" type="button"
                                 @click="login">Login
                         </button>
-                        <div v-if="isAuthenticated">
-                            <router-link to="/dashboard" class="btn btn-outline-secondary me-2">Dashboard</router-link>
-                            <button class="btn btn-outline-success me-2" type="button" @click="logout">Logout</button>
-                        </div>
                     </form>
                 </div>
             </div>
@@ -46,6 +42,9 @@
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link to="/edit" class="nav-link">Edit</router-link>
                         </li>
                         <li class="nav-item">
                             <router-link to="/create" class="nav-link">Create</router-link>
