@@ -1,17 +1,21 @@
 <template>
     <div class="bg-secondary h-100">
-        <div class="container card-group">
-            Welcome to your personal dashboard {{ user.given_name }}.
-            <div class="container">
-                <div class="card bg-dark text-white" v-if="currentMonthHours">
-                    <div class="card-title">{{currentMonth}}</div>
-                    <div class="card-content">{{currentMonthHours}}</div>
+        <div class="container">
+            <div class="text-white mb-2 pt-2">Welcome to your personal dashboard {{ user.given_name }}.</div>
+                <div class="card-group pb-4">
+                    <div class="card bg-secondary text-white border-4" v-if="currentMonthHours">
+                        <div class="card-body w-30">
+                            <div class="card-title">{{currentMonth}}</div>
+                            <div class="card-content">{{currentMonthHours}}</div>
+                        </div>
+                    </div>
+                    <div class="card bg-secondary text-white border-4" v-if="lastMonthHours">
+                        <div class="card-body w-30">
+                            <div class="card-title">{{lastMonth}}</div>
+                            <div class="card-content">{{lastMonthHours}}</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card bg-dark text-white" v-if="lastMonthHours">
-                    <div class="card-title">{{lastMonth}}</div>
-                    <div class="card-content">{{lastMonthHours}}</div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
@@ -25,8 +29,8 @@ export default {
     let months = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"];
     return {
-      currentMonth: (months[new Date().getMonth()+1] + " " + new Date().getFullYear()),
-      lastMonth: (months[new Date().getMonth()] + " " + new Date().getFullYear()),
+      currentMonth: (months[new Date().getMonth()] + " " + new Date().getFullYear()),
+      lastMonth: (months[new Date().getMonth()-1] + " " + new Date().getFullYear()),
       currentMonthHours: 0,
       lastMonthHours: 0,
       user: {},
