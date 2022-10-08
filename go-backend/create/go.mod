@@ -3,9 +3,8 @@ module api.hourkeeper.net/create
 go 1.18
 
 require (
+	api.hourkeeper.net/utils v0.0.0-00010101000000-000000000000
 	github.com/aws/aws-lambda-go v1.34.1
-	gorm.io/driver/postgres v1.3.10
-	gorm.io/gorm v1.23.10
 )
 
 require (
@@ -21,4 +20,8 @@ require (
 	github.com/jinzhu/now v1.1.4 // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
 	golang.org/x/text v0.3.7 // indirect
+	gorm.io/driver/postgres v1.4.4 // indirect
+	gorm.io/gorm v1.24.0 // indirect
 )
+
+replace api.hourkeeper.net/utils => ../utils

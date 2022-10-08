@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"os"
 	"time"
+
+	utility "api.hourkeeper.net/utils"
 )
 
 type resultRows struct {
@@ -13,17 +13,14 @@ type resultRows struct {
 	Date  time.Time `json:"date,string"`
 }
 
-func getFromDB(authorizer map[string]interface{}, body string) []byte {
+func getFromDB(userSub interface{}, body string) []byte {
 	dbUrl := os.Getenv("DB_URL")
-	gormDB, _ = gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
+
+	gormDB := utility.GetDB(dbUrl)
 
 	var bodyParseVar map[string]interface{}
 	_ = json.Unmarshal([]byte(body), &bodyParseVar)
 
-	jwtVar := authorizer["jwt"].(map[string]interface{})
-	claimsVar := jwtVar["claims"].(map[string]interface{})
-
-	userSub := claimsVar["sub"]
 	month := bodyParseVar["reqMonth"]
 	year := bodyParseVar["reqYear"]
 
