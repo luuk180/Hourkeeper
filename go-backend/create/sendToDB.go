@@ -27,10 +27,7 @@ func sendToDB(userSub interface{}, body string) string {
 	gormDB.Table("users").Where("auth0sub LIKE ?", userSub).Find(&userUUID)
 
 	HoursVar := Hours{Date: inputDate, Hours: inputHours, UserUUID: fmt.Sprintf("%s", userUUID["uuid"])}
-	err := gormDB.Select("date", "hours", "user_uuid").Create(&HoursVar)
-	if err != nil {
-		print(err)
-	}
+	gormDB.Select("date", "hours", "user_uuid").Create(&HoursVar)
 
 	return "Success!"
 }
