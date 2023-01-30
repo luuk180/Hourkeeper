@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 namespace Hourkeeper_API.Models;
 
@@ -17,11 +18,10 @@ public class HoursContext: DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(
-            "Host=lost-sable-1588.7tc.cockroachlabs.cloud;" +
-            "Port=26257;" +
-            "Database=hourkeeper;" +
-            "Username=hourkeeper;" +
-            "password=5M9u2YNc6n4UhkAfvHQudw");
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+        optionsBuilder.UseNpgsql(configuration.GetConnectionString("Prod"));
     }
 }

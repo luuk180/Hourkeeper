@@ -8,6 +8,9 @@
 # Database certificate
 root.crt
 
+# appsettings.json
+appsettings.json
+
 # User-specific files
 *.suo
 *.user

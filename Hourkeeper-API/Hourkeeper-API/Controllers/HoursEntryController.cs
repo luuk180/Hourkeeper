@@ -13,7 +13,7 @@ public class HoursEntryController : ControllerBase
     {
         var context = new HoursContext();
         var entries = context.HoursEntries.Where(h => h.UserUuid == "herro")
-            .Where(h => h.Date.Month == month).Where(h => h.Date.Year == year);
+            .Where(h => h.Date.Month == month).Where(h => h.Date.Year == year).OrderBy(h => h.Date);
         return new ActionResult<JsonContent>(new JsonResult(entries));
     }
 
