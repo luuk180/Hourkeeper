@@ -43,6 +43,7 @@ import {useAuth0} from "@auth0/auth0-vue";
 let currentDate = new Date();
 
 export default{
+  name: "Edit-Page",
   data() {
     return{
       dbRows: {},

@@ -63,6 +63,7 @@
 import {useAuth0} from '@auth0/auth0-vue';
 
 export default {
+  name: "Navigation-Bar",
   setup() {
     const {loginWithRedirect, logout, isAuthenticated, user} = useAuth0();
 

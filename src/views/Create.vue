@@ -21,6 +21,7 @@
 import {useAuth0} from "@auth0/auth0-vue";
 
 export default {
+  name: "Create-Page",
   data() {
     return {
       date: (new Date()).toISOString().split('T')[0],
