@@ -20,7 +20,8 @@ public class HoursContext: DbContext
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("secrets.json")
+                .AddEnvironmentVariables()
                 .Build();
-        optionsBuilder.UseNpgsql(configuration.GetConnectionString("Prod"));
+        optionsBuilder.UseNpgsql(configuration.GetConnectionString("Default"));
     }
 }
