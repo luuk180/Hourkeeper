@@ -68,23 +68,21 @@ export default{
     async getQuery (e) {
       e.preventDefault();
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      const response = await fetch('https://api.hourkeeper.net/read', {
-        method: "post",
+      const response = await fetch('https://api.hourkeeper.net/HoursEntry/allEntries/' + this.year + "/" + this.month, {
+        method: "GET",
         headers: {
           Authorization: 'Bearer ' + this.accessToken,
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "reqMonth": this.month,
-          "reqYear": this.year
-        })
+        }
       });
-      this.gotReturn = true;
-      this.dbRows = await response.json();
-      for(let i = this.dbRows.length - 1; i >= 0; i--){
-        this.dbRows[i].date = this.dbRows[i].date.substring(8, 10);
+      if(response.ok) {
+        this.gotReturn = true;
+        this.dbRows = await response.json();
+        for(let i = this.dbRows.length - 1; i >= 0; i--){
+          this.dbRows[i].date = this.dbRows[i].date.substring(8, 10);
+        }
+        this.requestMonth = months[this.month - 1];
       }
-      this.requestMonth = months[this.month - 1];
     }
   }
 }

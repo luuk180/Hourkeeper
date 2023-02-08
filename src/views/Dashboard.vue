@@ -15,6 +15,11 @@
                             <div class="card-content">{{lastMonthHours}}</div>
                         </div>
                     </div>
+                    <div class="card bg-secondary text-white border-4" v-if="nothingFound">
+                        <div class="card-body w-30">
+                            <div class="card-Title">No entries found!</div>
+                        </div>
+                    </div>
                 </div>
         </div>
     </div>
@@ -33,6 +38,7 @@ export default {
       currentMonthHours: 0,
       lastMonthHours: 0,
       user: {},
+      nothingFound: false,
     }
   },
   created() {
@@ -62,18 +68,18 @@ export default {
     async getQuery(month, year) {
       const {getAccessTokenSilently} = useAuth0();
       const token = await getAccessTokenSilently();
-      const response = await fetch('https://api.hourkeeper.net/read', {
-        method: "post",
+      const response = await fetch('https://api.hourkeeper.net/HoursEntry/allEntries/' + year + "/" + month, {
+        method: "GET",
         headers: {
           Authorization: 'Bearer ' + token,
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "reqMonth": month,
-          "reqYear": year
-        })
+        }
       });
-      return response.json();
+      if(response.ok){
+        return response.json();
+      }else{
+        this.nothingFound = true;
+      }
     },
     async getCurrentMonthHours() {
       let currentDate = new Date();
