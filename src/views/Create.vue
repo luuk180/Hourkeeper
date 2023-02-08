@@ -3,7 +3,7 @@
         <form class="w-75 container pt-2 pb-2">
             <div class="form-group mb-2">
                 <label for="hours">Hours worked: {{ hours }}</label>
-                <input type="range" min="0" max="24" step=".25" class="form-control" v-model="hours" />
+                <input type="range" min="0" max="24" step=".25" class="form-control" v-model.number="hours" />
             </div>
             <div class="form-group mb-2">
                 <label for="date">Date:</label>
@@ -37,18 +37,18 @@ export default {
     },
     async submitForm (e) {
       e.preventDefault();
-      const response = await fetch('https://api.hourkeeper.net/create', {
-        method: "post",
+      const response = await fetch('https://api.hourkeeper.net/HoursEntry/addEntry/', {
+        method: "POST",
         headers: {
           Authorization: 'Bearer ' + this.accessToken,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json; charset=UTF-8'
         },
         body: JSON.stringify({
-          "hours": this.hours,
-          "date": this.date
-        })
+          Date: this.date,
+          Hours: this.hours
+        }),
       });
-      if(response.statusCode === 200) {
+      if(response.ok){
         this.result = "Success!"
       }else{
         this.result = "Failed to add hours."

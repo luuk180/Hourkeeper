@@ -17,11 +17,11 @@ public class HoursContext: DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("secrets.json")
-                .AddEnvironmentVariables()
-                .Build();
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("secrets.json")
+            .AddEnvironmentVariables()
+            .Build();
         optionsBuilder.UseNpgsql(configuration.GetConnectionString("Default"));
     }
 }

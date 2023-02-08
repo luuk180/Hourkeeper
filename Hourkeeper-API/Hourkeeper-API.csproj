@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>aspnet-Hourkeeper_API-88AE67C2-E677-4B82-B746-FA560944EC21</UserSecretsId>
         <RootNamespace>Hourkeeper_API</RootNamespace>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
