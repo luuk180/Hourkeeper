@@ -63,6 +63,8 @@ export default{
       this.accessToken = await getAccessTokenSilently();
     },
     resetForm() {
+      this.dbRows = {};
+      this.requestMonth = "";
       this.gotReturn = false;
     },
     async getQuery (e) {
