@@ -44,27 +44,10 @@ export default {
   created() {
     const {user} = useAuth0();
     this.user = user;
-    this.monthString()
     this.getCurrentMonthHours();
     this.getLastMonthHours();
   },
   methods: {
-    monthString() {
-      const months = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"];
-      const date = new Date()
-      this.currentMonth = months[date.getMonth()] + " " + date.getFullYear()
-      let month = date.getMonth()
-      let year = date.getFullYear()
-      if (month === 0) {
-        month = 11
-        year--
-      }else{
-        month--
-      }
-      this.lastMonth = months[month] + " " + year
-    },
-
     async getQuery(month, year) {
       const {getAccessTokenSilently} = useAuth0();
       const token = await getAccessTokenSilently();
