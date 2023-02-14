@@ -17,7 +17,7 @@
                     </div>
                     <div class="card bg-secondary text-white border-4" v-if="nothingFound">
                         <div class="card-body w-30">
-                            <div class="card-Title">No entries found!</div>
+                            <div class="card-Title">No hours found!</div>
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@ export default {
     async getQuery(month, year) {
       const {getAccessTokenSilently} = useAuth0();
       const token = await getAccessTokenSilently();
-      const response = await fetch('https://api.hourkeeper.net/HoursEntry/allEntries/' + year + "/" + month, {
+      const response = await fetch('https://api.hourkeeper.net/HoursEntry/monthTotal/' + year + "/" + month, {
         method: "GET",
         headers: {
           Authorization: 'Bearer ' + token,
@@ -84,11 +84,8 @@ export default {
     async getCurrentMonthHours() {
       let currentDate = new Date();
       this.getQuery(currentDate.getMonth() + 1, currentDate.getFullYear()).then((data) => {
-        let totalHours = 0;
-        for (let i = 0; i < data.length; i++) {
-          totalHours += parseFloat(data[i].hours);
-        }
-        this.currentMonthHours = totalHours;
+        this.currentMonth = data.monthName;
+        this.currentMonthHours = data.monthHours;
       })
     },
     async getLastMonthHours() {
@@ -98,23 +95,13 @@ export default {
       if (month === 1) {
         month = 12;
         year--;
-        this.getQuery(month, year).then((data) => {
-          let totalHours = 0;
-          for (let i = 0; i < data.length; i++) {
-            totalHours += parseFloat(data[i].hours);
-          }
-          this.lastMonthHours = totalHours;
-        })
-      } else {
+      }else{
         month--;
-        this.getQuery(month, year).then((data) => {
-          let totalHours = 0;
-          for (let i = 0; i < data.length; i++) {
-            totalHours += parseFloat(data[i].hours);
-          }
-          this.lastMonthHours = totalHours;
-        })
       }
+      this.getQuery(month, year).then((data) => {
+        this.lastMonth = data.monthName;
+        this.lastMonthHours = data.monthHours;
+      });
     }
   }
 }

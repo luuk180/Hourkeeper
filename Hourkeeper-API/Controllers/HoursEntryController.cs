@@ -1,4 +1,4 @@
-using System.Dynamic;
+using System.Globalization;
 using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,29 @@ namespace Hourkeeper_API.Controllers;
 [Route("[Controller]")]
 public class HoursEntryController : ControllerBase
 {
-    
+    [Authorize]
+    [HttpGet("monthTotal/{year:int}/{month:int}")]
+    public ActionResult<JsonContent> Total(int year, int month)
+    {
+        var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        if (id == null)
+        {
+            return new ActionResult<JsonContent>(NoContent());
+        }
+
+        var monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
+
+        var db = new HoursContext();
+        var userId = id.Value;
+        var totalHours = db.HoursEntries.Where(h => h.UserUuid == userId)
+            .Where(h => h.Date.Month == month).Where(h => h.Date.Year == year)
+            .OrderBy(h => h.Date).Sum(h => h.Hours);
+        return new ActionResult<JsonContent>(new JsonResult(new MonthTotal{
+            MonthName = monthName,
+            MonthHours = totalHours
+        }));
+}
+
     [Authorize]
     [HttpGet("allEntries/{year:int}/{month:int}")]
     public ActionResult<JsonContent> Get(int year, int month)
@@ -22,21 +44,15 @@ public class HoursEntryController : ControllerBase
         {
             return new ActionResult<JsonContent>(NoContent());
         }
+
         var userId = id.Value;
-        
+
         var context = new HoursContext();
         var entries = context.HoursEntries.Where(h => h.UserUuid == userId)
-            .Where(h => h.Date.Month == month).Where(h => h.Date.Year == year).OrderBy(h => h.Date);
-        var returnEntries = new List<ReturnHours>();
-        foreach (var entry in entries)
-        {
-            returnEntries.Add(new ReturnHours
-            {
-                Date = entry.Date,
-                Hours = entry.Hours
-            });
-        }
-        return !entries.Any() ? new ActionResult<JsonContent>(NoContent()) : new ActionResult<JsonContent>(new JsonResult(returnEntries));
+            .Where(h => h.Date.Month == month).Where(h => h.Date.Year == year)
+            .OrderBy(h => h.Date).Select(h => new {h.Date, h.Hours});
+
+        return !entries.Any() ? new ActionResult<JsonContent>(NoContent()) : new ActionResult<JsonContent>(new JsonResult(entries));
     }
 
     [Authorize]
