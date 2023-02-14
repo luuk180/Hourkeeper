@@ -2,6 +2,7 @@ namespace Hourkeeper_API.Models;
 
 public class MonthTotal
 {
-	public string? MonthName { get; set; }
-	public double MonthHours { get; set; }
+	public string? MonthName;
+	
+	public double MonthHours;
 }

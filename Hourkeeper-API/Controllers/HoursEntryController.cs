@@ -23,16 +23,20 @@ public class HoursEntryController : ControllerBase
         }
 
         var monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
-
         var db = new HoursContext();
         var userId = id.Value;
+        
         var totalHours = db.HoursEntries.Where(h => h.UserUuid == userId)
             .Where(h => h.Date.Month == month).Where(h => h.Date.Year == year)
             .OrderBy(h => h.Date).Sum(h => h.Hours);
-        return new ActionResult<JsonContent>(new JsonResult(new MonthTotal{
+        
+        var monthTotal = new MonthTotal
+        {
             MonthName = monthName,
             MonthHours = totalHours
-        }));
+        };
+        
+        return new ActionResult<JsonContent>(totalHours > 0 ? new JsonResult(monthTotal) : NoContent());
 }
 
     [Authorize]
