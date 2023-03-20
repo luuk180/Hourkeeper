@@ -69,8 +69,14 @@ export default{
     },
     async getQuery (e) {
       e.preventDefault();
-      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       const response = await fetch('https://api.hourkeeper.net/HoursEntry/allEntries/' + this.year + "/" + this.month, {
+        method: "GET",
+        headers: {
+          Authorization: 'Bearer ' + this.accessToken,
+          'Content-Type': 'application/json'
+        }
+      });
+      const monthTotal = await fetch('https://api.hourkeeper.net/HoursEntry/monthTotal/' + this.year + "/" + this.month, {
         method: "GET",
         headers: {
           Authorization: 'Bearer ' + this.accessToken,
@@ -83,7 +89,11 @@ export default{
         for(let i = this.dbRows.length - 1; i >= 0; i--){
           this.dbRows[i].date = this.dbRows[i].date.substring(8, 10);
         }
-        this.requestMonth = months[this.month - 1];
+      }
+      if(monthTotal.ok){
+        const jsonTotal = await monthTotal.json();
+        this.requestMonth = jsonTotal.monthName;
+        this.dbRows.push({date: 'Total', hours: jsonTotal.monthHours})
       }
     }
   }
