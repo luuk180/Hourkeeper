@@ -4,7 +4,6 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Hourkeeper_API.Models;
 using Microsoft.AspNetCore.Authorization;
-using Exception = System.Exception;
 
 namespace Hourkeeper_API.Controllers;
 

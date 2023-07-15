@@ -5,14 +5,14 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Hourkeeper-API.csproj", "./"]
-RUN dotnet restore "Hourkeeper-API.csproj"
+COPY ["Hourkeeper-API/Hourkeeper-API.csproj", "Hourkeeper-API/"]
+RUN dotnet restore "Hourkeeper-API/Hourkeeper-API.csproj"
 COPY . .
-WORKDIR "/src/"
+WORKDIR "/src/Hourkeeper-API"
 RUN dotnet build "Hourkeeper-API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Hourkeeper-API.csproj" -c Release -o /app/publish
+RUN dotnet publish "Hourkeeper-API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
