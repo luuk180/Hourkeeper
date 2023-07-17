@@ -1,24 +1,7 @@
-# hourkeeper
+# Hourkeeper
+An application to keep track of the hours you work.
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Technical
+This project contains a front-end and a back-end.
+Hourkeeper is the frontend and Hourkeeper-API is the backend.
+The frontend is made with react and the backend with ASP.NET.
