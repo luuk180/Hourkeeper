@@ -1,38 +1,34 @@
-using System.Security.Claims;
 using Hourkeeper_API.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var config = new ConfigurationBuilder()
-    .AddJsonFile("secrets.json", optional: false)
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables()
     .Build();
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    options.Authority = $"https://{config["Auth0:Domain"]}/";
-    options.Audience = config["Auth0:Audience"];
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        NameClaimType = ClaimTypes.NameIdentifier
-    };
-});
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin",
-        corsPol =>
-            corsPol
+    options.AddDefaultPolicy(
+        policy =>
+            policy
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader()
         );
 });
 
-builder.Services.AddDbContext<HoursContext>();
+builder.Services.AddDbContext<HoursContext>(options =>
+    options.UseNpgsql(configuration.GetConnectionString("Cockroach")));
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<HoursContext>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -45,6 +41,20 @@ builder.Services.Configure<KestrelServerOptions>(options =>
 
 var app = builder.Build();
 
+app.MapIdentityApi<IdentityUser>();
+
+app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager,
+        [FromBody]object empty) =>
+    {
+        if (empty != null)
+        {
+            await signInManager.SignOutAsync();
+            return Results.Ok();
+        }
+        return Results.Unauthorized();
+    })
+    .RequireAuthorization();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -54,10 +64,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.UseCors("AllowSpecificOrigin");
+app.UseCors();
 
 app.MapControllers();
 

@@ -1,27 +1,26 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hourkeeper_API.Models;
 
-public class HoursContext: DbContext
+public class HoursContext: IdentityDbContext<IdentityUser>
 {
+    public HoursContext(DbContextOptions<HoursContext> options) : base(options){}
     static HoursContext() {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
-    public DbSet<HoursEntry> HoursEntries { get; set; } = null!;
+    public DbSet<DayWorked> DaysWorked { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<HoursEntry>().HasKey(entry => new { entry.Date, entry.UserUuid });
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("secrets.json")
-            .AddEnvironmentVariables()
-            .Build();
-        optionsBuilder.UseNpgsql(configuration.GetConnectionString("Default"));
+        modelBuilder.Entity<DayWorked>()
+            .HasOne<IdentityUser>()
+            .WithMany()
+            .HasForeignKey(h => h.UserId);
+        modelBuilder.Entity<DayWorked>()
+            .HasKey(h => new { h.UserId, h.Date });
+        base.OnModelCreating(modelBuilder);
     }
 }

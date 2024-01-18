@@ -6,13 +6,18 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import Home from "./Pages/Home";
-import Navbar from "./Components/Navbar";
+// import Navbar from "./Components/Navbar";
+import Registration from "./Pages/Registration.tsx";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Home />,
     },
+    {
+        path: "/registration",
+        element: <Registration />
+    }
 ]);
 
 const root = ReactDOM.createRoot(
@@ -20,7 +25,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <React.StrictMode>
-        <Navbar />
+        {/*<Navbar />*/}
         <RouterProvider router={router}/>
     </React.StrictMode>
 );
