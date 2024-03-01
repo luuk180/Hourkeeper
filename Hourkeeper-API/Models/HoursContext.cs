@@ -6,12 +6,11 @@ namespace Hourkeeper_API.Models;
 
 public class HoursContext: IdentityDbContext<IdentityUser>
 {
-    public HoursContext(DbContextOptions<HoursContext> options) : base(options){}
-    static HoursContext() {
+    public HoursContext(DbContextOptions<HoursContext> options): base(options) {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
-    public DbSet<DayWorked> DaysWorked { get; set; }
+    public DbSet<DayWorked> DaysWorked { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
